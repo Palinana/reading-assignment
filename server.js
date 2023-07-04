@@ -6,35 +6,32 @@ const mongoose = require("mongoose");
 
 
 
-async function main() {
-    await mongoose.connect(
-      "mongodb+srv://palinapch:2BVqsgrmiLC&R4d@cluster0.4fwah1b.mongodb.net/?retryWrites=true&w=majority",
-      {
-        useUnifiedTopology: true,
-        useNewUrlParser: true,
-      }
-    );
-  
-    // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-  }
-  
+MongoClient.connect("mongodb+srv://palinapch:2BVqsgrmiLC&R4d@cluster0.4fwah1b.mongodb.net/?retryWrites=true&w=majority", { useUnifiedTopology: true })
+  .then(client => {
+    console.log('Connected to Database')
+    const db = client.db('star-wars-quotes')
+    const quotesCollection = db.collection('quotes')
 
-  app.set("views", "./src/views");
-  app.set("view engine", "ejs");
-  // Make sure you place body-parser before your CRUD handlers!
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(express.json());
+    app.set("views", "./src/views");
+    app.set("view engine", "ejs");
+    // Make sure you place body-parser before your CRUD handlers!
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(express.json());
+  
+    
+    app.get('/', (req, res) => {
+      res.sendFile(__dirname + '/index.html')
+      // Note: __dirname is the current directory you're in. Try logging it and see what you get!
+      // Mine was '/Users/zellwk/Projects/demo-repos/crud-express-mongo' for this app.
+    })
+  
+    app.listen(3000, function () {
+      console.log("listening on 3000");
+    });
+
+})  
 
   
-  app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
-    // Note: __dirname is the current directory you're in. Try logging it and see what you get!
-    // Mine was '/Users/zellwk/Projects/demo-repos/crud-express-mongo' for this app.
-  })
-
-  app.listen(4000, function () {
-    console.log("listening on 4000");
-  });
 
 
 
